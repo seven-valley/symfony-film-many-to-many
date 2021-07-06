@@ -15,10 +15,7 @@ class FilmType extends AbstractType
     {
         $builder
             ->add('title')
-            ->add('test', DateType::class, [
-                'widget' => 'single_text',
-                ])
-            ->add('acteurs',null,[ 'choice_label'=>'nom' , 'mapped'=>false]);
+            ->add('acteurs',null,[ 'choice_label'=>'nom']);
             //->add('acteurs');
         ;
     }

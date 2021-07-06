@@ -33,8 +33,8 @@ class FilmController extends AbstractController
 
         if ($form->isSubmitted()) {
             // recupérer le tableau et le traiter
-            $tab = $form->get('acteurs')->getData();
-            dd($tab);
+            //$tab = $form->get('acteurs')->getData();
+            //dd($tab);
             $em->persist($film);
             $em->flush();
 

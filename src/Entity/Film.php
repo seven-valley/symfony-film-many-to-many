@@ -29,10 +29,7 @@ class Film
      */
     private $acteurs;
 
-    /**
-     * @ORM\Column(type="date", nullable=true)
-     */
-    private $test;
+   
 
     public function __construct()
     {
@@ -80,15 +77,4 @@ class Film
         return $this;
     }
 
-    public function getTest(): ?\DateTimeInterface
-    {
-        return $this->test;
-    }
-
-    public function setTest(?\DateTimeInterface $test): self
-    {
-        $this->test = $test;
-
-        return $this;
-    }
-}
+  }
