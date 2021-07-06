@@ -1,0 +1,9 @@
+
+{% for film in films %}
+<h1>{{ film.title }}</h1>
+<ul>
+    {% for acteur in film.acteurs %}
+    <li>{{acteur.prenom}} {{acteur.nom}}</li>
+    {% endfor %}
+</ul>
+{% endfor %}
