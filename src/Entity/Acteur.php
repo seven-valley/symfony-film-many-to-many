@@ -28,7 +28,11 @@ class Acteur
      */
     private $nom;
 
-   
+    public function getFullName(): ?string
+    {
+        return $this->prenom." ".$this->nom;
+    }
+    
     public function getId(): ?int
     {
         return $this->id;

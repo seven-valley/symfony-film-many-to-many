@@ -1,9 +1,18 @@
+{% extends 'template.html.twig' %}
 
-{% for film in films %}
-<h1>{{ film.title }}</h1>
-<ul>
-    {% for acteur in film.acteurs %}
-    <li>{{acteur.prenom}} {{acteur.nom}}</li>
+{% block title %} Movie {{parent() }}{% endblock %}
+
+{% block main %}
+    <a href="{{ path('ajouter_film')}}">ajouter un film</a>
+    {% for film in films %}
+    <h1>{{ film.title }}</h1>
+    <a href="{{ path('modifier_film',{ 'id': film.id })}}">modifier</a>
+    <ul>
+        {% for acteur in film.acteurs %}
+        <li>{{acteur.prenom}} {{acteur.nom}}</li>
+        {% endfor %}
+    </ul>
     {% endfor %}
-</ul>
-{% endfor %}
+{% endblock %}
+
+{% block js %}{% endblock %}

@@ -6,6 +6,7 @@ use App\Entity\Film;
 
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
@@ -15,8 +16,9 @@ class FilmType extends AbstractType
     {
         $builder
             ->add('title')
-            ->add('acteurs',null,[ 'choice_label'=>'nom']);
-            //->add('acteurs');
+            ->add('acteurs',null,[ 'choice_label'=>'fullname'])
+            ->add('nom',TextType::class,['mapped'=>false])
+            ->add('prenom',TextType::class,['mapped'=>false]);
         ;
     }
 
