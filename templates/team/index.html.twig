@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Mini projet Equipe de personnes</title>
+	<meta charset="utf-8">
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" >
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" integrity="sha512-iBBXm8fW90+nuLcSKlbmrPcLa0OT92xO1BIsZ+ywDWZCvqsWgccV3gFoRBv0z+8dLJgyAHIhR35VZc2oM/gI1w==" crossorigin="anonymous" />
+
+	
+
+	<style>
+		.divListUser,.divUser{
+			background-color: #ccc;
+			padding: 20px;
+			border-radius: 20px
+		}
+		.divListUser{
+			margin-top:20px;
+			border-radius: 20px
+		}	
+
+		.divTeam{
+			background-color: #ccc;
+			padding: 20px;
+			border-radius: 20px
+		}
+		#tabListUser td{ height: 45px; width:120px;}
+
+
+		.my-helper{
+			width:150px;
+			height:50px;
+			background-color: #CCC;
+			padding:10px;
+			cursor: all-scroll;
+		}
+		.ui-state-hover{
+			background-color: #FFCCCB;
+		}
+		#tabChoix tr td:hover{
+			cursor: all-scroll;
+		}
+	</style>
+</head>
+<body>
+	<div class="container mt-3">
+
+		<div class="row">
+			<div class="col-md-8">
+				<div class="divTeam">
+                    {{ form_start(formEquipe,{'action':path('equipe_ajouter')}) }}
+					<div class="row">
+						<div class="col-4">
+							
+							{{ form_widget(formEquipe.nom) }}
+						</div>
+						<div class="col-8">
+							<button class="btn btn-success" 
+							type="submit" >
+							<i class="fa fa-plus"></i>
+						</button>
+					</div>
+                      {{ form_end(formEquipe) }}
+				</div>
+
+
+			</div>
+			<div id="demo">
+          {% for equipe in equipes %}    
+            <table class="table table-striped mt-5 equipe" data-equipe="{{ equipe.id }}">
+                <tbody>
+                    <tr>
+                        <td colspan="3"><h3>{{ equipe.nom }}
+                            <a href="{{ path('equipe_enlever',{ 'id': equipe.id}) }}"
+                             class="btn btn-danger">
+                                <i class="fa fa-trash"></i>
+                            </a>
+
+                        </h3>
+                        
+                        </td>
+                    </tr>
+                
+                     <tr>
+                        <th>Prénom</th>
+                        <th>Nom</th>
+                        <th>Action</th>
+                    </tr>
+                     
+               
+                {% for personne in equipe.personnes %}
+                     <tr data-personne="{{ personne.id }}">
+                        <td>{{ personne.prenom}}</td>
+                        <td>{{ personne.nom}}</td>
+                        <td>
+                            <a href="{{ path('equipe_enlever_personne', {'equipe': equipe.id, 'personne': personne.id})}}" 
+							class="btn btn-danger">
+                                <i class="fa fa-trash"></i>
+                            </a>
+                        </td>
+                        
+                    </tr>
+                {% endfor %}
+                </tbody>
+
+            </table>
+            {% endfor %}   
+            </div>
+		</div>
+		<div class="col-md-4">
+			<div class="divUser">
+				{{ form_start(formPersonne,{'action':path('personne_ajouter')})}}
+                <div class="form-group">
+				{{ form_widget(formPersonne.prenom)}}
+               </div>
+                <div class="form-group">
+				{{ form_widget(formPersonne.nom)}}
+                 </div>
+                <div class="form-group">
+				{{ form_widget(formPersonne.equipes)}}
+                 </div> 
+				<div class="form-group text-center mb-0">
+				<button class="btn btn-success btn-lg " 
+					id="btnAddUser">
+					<i class="fa fa-plus"></i>
+				</button>
+			    </div>
+				{{ form_end(formPersonne)}}
+
+
+		</div>
+
+
+
+		<div class="divListUser">
+			<table id="tabChoix">
+             {% for p in personnes %}
+            <tr data-personne="{{ p.id }}" >
+                <td>{{ p.prenom }}</td>
+                <td>{{ p.nom }}</td>
+                <td class="col-2">
+                 <a 
+				 onclick="return confirm('Voulez vous supprimer {{ p.prenom }} {{ p.nom }} ?')"
+				 href="{{ path('personne_enlever',{ 'personne': p.id}) }}" class="btn btn-danger">
+                                <i class="fa fa-trash"></i>
+                            </a>
+                </td>
+            </tr>
+            {% endfor %}
+			</table>
+		</div>
+
+	</div>	<!-- col4 -->
+</div><!-- row -->
+
+</div><!-- container -->
+
+<script
+  src="https://code.jquery.com/jquery-3.6.0.min.js"
+  integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4="
+  crossorigin="anonymous"></script>
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+<script>
+$( function() {
+	//----------------------------
+	//----------------------------
+	// les elements à glisser
+	$("#tabChoix tr, .equipe tr").draggable({
+ 		revert: "valid",
+ 		 helper: function() {
+       		var nom = $(this).children().eq(0).html() 
+       							+' '+ $(this).children().eq(1).html() 
+        	return $("<div></div>").text(nom).addClass("my-helper");
+    	} 
+		});
+	//----------------------------
+	// zone de dépot
+	$(".equipe").droppable({
+		classes: {
+        
+        "ui-droppable-hover": "ui-state-hover"
+      },
+      drop: function( event, ui ) {
+      //	console.log('personne :'+ $(ui.draggable).data("personne"));
+      //	console.log('equipe :'+ $(this).attr('data-equipe'));
+		let p = $(ui.draggable).data("personne");
+		let equipe = $(this).data('equipe');
+		let url = 'ajouter-personne-equipe/'+equipe+'/'+p;
+		fetch(url)
+  			.then(response => response.json())
+  			.then(data => {
+				  console.log(data);
+				  location.reload();
+				  });	
+      	//console.log($(ui.draggable).html())
+        //$( this ).append('<tr>'+$(ui.draggable).html()+'</tr>')
+         
+      }
+		});
+
+});	
+</script>
+</body>
+</html>
